@@ -30,7 +30,16 @@ the default is false
 it is a bit slow and secure cause we wait for it to finish writing in the journal 
 
 
+#### wtimeout
 
+this is the option we can use this if the connection is shakey. and we complete it after some time
 
+### Atomicity
+
+it success as a whole. or noting is saved as a whole(rolled back)
+
+insertMany() doesnot suppport this
+<br>
+insertOne() supports
 
 
