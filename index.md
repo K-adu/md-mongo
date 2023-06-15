@@ -23,6 +23,10 @@ we can create index in mongodb with the createIndex() method<br>
 the -1 is descending and 1 is the ascending indexing of the document
 ```js
 db.collectionName.createIndex({"key": -1/1})
+
+
+///for dropping inde
+db.collection.dropIndex({"key": -1/1})
 ```
 after creating index if we perform certain task we can see the decrease in executionTime.<br>
 
