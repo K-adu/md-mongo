@@ -102,4 +102,49 @@ db.users.update(
 
 
 ### updating matched array elements
+```js
+{
+  "_id": 1,
+  "name": "John",
+  "scores": [85, 90, 95, 80, 70]
+}
+```
+Let's say we want to update a specific score in the scores array. For example, we want to increment the second score by 10. We can use the positional operator $ in combination with the $inc operator in an update operation:
 
+```js
+db.users.updateOne(
+  { "_id": 1, "scores": 90 },
+  { "$inc": { "scores.$": 10 } }
+)
+
+```
+
+```js
+{
+  "_id": 1,
+  "name": "John",
+  "scores": [85, 100, 95, 80, 70]
+}
+
+```
+
+### Adding element to an array
+lets say we want to attach a new hobby to the old hobby without updating
+'$push'
+
+```js
+db.users.updateOne{$push:{hobbies: {title: "sports"}}}
+```
+
+'$each'
+we can use the each operator to add many objects 
+```js
+db.users.updateOne({key: value},{$push: {key: {$each: [{doc1},{docN}]}}})
+```
+'$sort'
+we can use it as a sibling to the each operator to sort 
+
+
+## Addtoset operator
+
+we can push dublicate command with the '$push' operator but with '$addToSet' we cannot add a dublicate value to the set
