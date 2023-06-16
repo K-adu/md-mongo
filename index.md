@@ -96,7 +96,38 @@ and now if we createIndex such as
 db.session.createIndex({createdAt: 1}, {expiresAfterSecond: 10})
 ```
 
-now if we find the vlaue it wont expire at fist cause we created index later after inserting the document<br>
+now if we find the vlaue, it wont expire at fist cause we created index later after inserting the document<br>
 but after we add a new document the total will get reevaluated and now after 10 second the total document will get deleted
 
 
+## understanding txt indexes
+
+Text indexes are particularly useful when dealing with natural language processing, full-text search, and text-based search applications.<br>
+They provide advanced capabilities for tokenizing, stemming, and ranking text data, enabling more sophisticated search functionalities than traditional indexes.<br>
+
+<b>Tokenizing </b>
+breaking into smaller indivudail words or terms.
+<b>stemming</b>
+reducing the words to theit base or root form
+.
+.
+.
+
+```js
+
+db.mycollection.createIndex({ content: 'text' })
+
+// Insert sample documents
+db.mycollection.insertMany([
+  { content: 'This is the first document' },
+  { content: 'This document is the second document' },
+  { content: 'And this is the third one' },
+  { content: 'Is this the first document?' }
+])
+
+// Perform a text search
+const searchQuery = 'first document';
+db.mycollection.find({ $text: { $search: searchQuery } })
+
+
+```
