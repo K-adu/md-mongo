@@ -131,3 +131,21 @@ db.mycollection.find({ $text: { $search: searchQuery } })
 
 
 ```
+
+## text indexes and sorting
+we can sort text search results by their relevance using the '$textScore meta projection'. Additionally, you can apply additional sorting criteria to further refine the order of the search results.
+```js
+
+db.mycollection.createIndex({ content: 'text' })
+
+// Perform a text search with sorting
+const searchQuery = 'text to search';
+const sortCriteria = { score: { $meta: 'textScore' }, createdAt: -1 };
+db.mycollection.find({ $text: { $search: searchQuery } }, { score: { $meta: 'textScore' } }).sort(sortCriteria)
+
+
+```
+
+## using text indexes to exclude words
+we can use the minus to exclude words
+
