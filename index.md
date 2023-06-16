@@ -47,10 +47,18 @@ Something like this (for the "age" field):
 (33, "address in memory/ collection a3")<br>
 
 The documents in the collection would be at the "addresses" a1, a2 and a3. The order does not have to match the order in the index (and most likely, it indeed won't).
-
+<br>
 The important thing is that the index items are ordered (ascending or descending - depending on how you created the index). createIndex({age: 1}) creates an index with ascending sorting, createIndex({age: -1}) creates one with descending sorting.
-
+<br>
 MongoDB is now able to quickly find a fitting document when you filter for its age as it has a sorted list. Sorted lists are way quicker to search because you can skip entire ranges (and don't have to look at every single document).
-
+<br>
 Additionally, sorting (via sort(...)) will also be sped up because you already have a sorted list. Of course this is only true when sorting for the age.
 
+## Compound Indexes
+
+making indexes with more than one field<br>
+the order of creation does matter while creating compound indexes<br>
+it doesnot create 2 indexes but it create 1 indexes with connected values<br>
+```js
+db.contacts.createIndex({"dob.age":1,gender: 1})
+```
