@@ -22,7 +22,7 @@ now we saw how to create GeoJson data now lets see how we can query those data
 ## Quering GeoJSON Data
 
 <b>'$near'</b> is the operator provided by mongodb to work with geoSpatial data
-<b>'$geometry'</b> 
+<b>'$geometry'</b> its just a geoJSON object
 
 ```js
 db.places.find({location: {$near: {$geometry: {type:"point",coordinates: [lat,lon]}}}})
@@ -51,4 +51,41 @@ so now what we can do is use the keywords like max distance and min distance
      }
    }
 }
+```
+## Finding places inside a certain area
+<b>'$geoWithin'</b>
+
+```js
+db.places.find({location: {geowithin: {$gemometry: {type: "Polygon",coordinates: [[p1,p2,p3,p4,p1]]}}}})
+// wherte p1-p4 are the coordinates of the ploygon
+// we end the coordinate with the p1 as the polygon  endup with the starting point
+```
+
+
+## finding if a coordinate exist within
+The following example uses 
+<b>$geoIntersects</b>
+ to select all loc data that intersect with the Polygon defined by the coordinates array. <br>
+ The area of the polygon is less than the area of a single hemisphere:
+
+```js
+db.places.find(
+   {
+     loc: {
+       $geoIntersects: {
+          $geometry: {
+             type: "Polygon" ,
+             coordinates: [
+               [ [ 0, 0 ], [ 3, 6 ], [ 6, 1 ], [ 0, 0 ] ]
+             ]
+          }
+       }
+     }
+   }
+)
+```
+
+## Finding places within certain radius
+```js
+db.places.find({location: {$geowithin: {$centerSphere: [[long,lat], radiusinradians]}}})
 ```
