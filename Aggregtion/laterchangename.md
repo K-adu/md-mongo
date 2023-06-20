@@ -11,6 +11,25 @@ Find: "Find" typically refers to a query operation used to retrieve specific dat
 
 taking a look at the first aggregation query<br>
 
+
+### $lookup
+
+the lookup operator in mongodb is used to perform a left outer join between two collections.
+
+```js
+db.orders.aggregate([{
+  $lookup:{
+    from: "customers",
+    localField:"customers",
+    foreignField: "_id",
+    as: "customer",
+  }
+}])
+```
+
+
+
+
 ### $match
 In the context of the aggregation framework in MongoDB, the '$match' operator is used as the initial stage in an aggregation pipeline to filter and select documents that meet specific criteria. It allows you to narrow down the set of documents that will be processed in subsequent stages of the aggregation pipeline.<br>
 The '$match' operator takes a query expression as its argument and filters the documents based on the specified conditions. The query expression can contain various operators and comparisons to match specific fields or values within the documents.
@@ -42,7 +61,26 @@ db.persons.aggregate{[{
     }
     ]}
 ```
+'$lookup' with pipeline
+```js
+db.orders.aggregate([
+  {
+    $lookup: {
+      from: "products",
+      let: { productId: "$productId" },
+      pipeline: [
+        {
+          $match: {
+            $expr: { $eq: ["$_id", "$$productId"] }
+          }
+        }
+      ],
+      as: "product"
+    }
+  }
+]);
 
+```
 some more example of aggregation
 ```js
 db.orders.aggregate( [
