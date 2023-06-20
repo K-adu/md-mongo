@@ -42,6 +42,62 @@ db.persons.aggregate{[{
     }
     ]}
 ```
+
+some more example of aggregation
+```js
+db.orders.aggregate( [
+   // Stage 1: Filter pizza order documents by date range
+   {
+      $match:
+      {
+         "date": { $gte: new ISODate( "2020-01-30" ), $lt: new ISODate( "2022-01-30" ) }
+      }
+   },
+   // Stage 2: Group remaining documents by date and calculate results
+   {
+      $group:
+      {
+         _id: { $dateToString: { format: "%Y-%m-%d", date: "$date" } },
+         totalOrderValue: { $sum: { $multiply: [ "$price", "$quantity" ] } },
+         averageOrderQuantity: { $avg: "$quantity" }
+      }
+   },
+   // Stage 3: Sort documents by totalOrderValue in descending order
+   {
+      $sort: { totalOrderValue: -1 }
+   }
+ ] )
+
+```
+## The `$match` stage:
+
+- Filters the pizza order documents to those in a date range specified using `$gte` and `$lt`.
+- Passes the remaining documents to the `$group` stage.
+
+## The `$group` stage:
+
+- Groups the documents by date using `$dateToString`.
+- For each group, calculates:
+  - Total order value using `$sum` and `$multiply`.
+  - Average order quantity using `$avg`.
+- Passes the grouped documents to the `$sort` stage.
+
+## The `$sort` stage:
+
+- Sorts the documents by the total order value for each group in descending order (`-1`).
+- Returns the sorted documents.
+
+
+example output:
+```js
+[
+   { _id: '2022-01-12', totalOrderValue: 790, averageOrderQuantity: 30 },
+   { _id: '2021-03-13', totalOrderValue: 770, averageOrderQuantity: 15 },
+   { _id: '2021-03-17', totalOrderValue: 630, averageOrderQuantity: 30 },
+   { _id: '2021-01-13', totalOrderValue: 350, averageOrderQuantity: 10 }
+]
+```
+
 on the above code the sorting doesnot have access to the result retyurned by the match operator.
 this is how the aggregration pipeline works, filtering from layer to layer and performing operations
 
